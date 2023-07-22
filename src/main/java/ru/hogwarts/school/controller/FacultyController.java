@@ -62,4 +62,19 @@ public class FacultyController {
     return facultyService.findStudents(id);
   }
 
+  @GetMapping("/longest-name")
+  public String getLongestName() {
+    return facultyService.getLongestName();
+  }
+
+  @GetMapping("/sum")
+  public Integer sum() {
+    return facultyService.sum();
+  }
+
+  @GetMapping("/sum-impr")
+  public Integer sumImpr() {
+    return facultyService.sumImpr();
+  }
+
 }

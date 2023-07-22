@@ -1,8 +1,11 @@
 package ru.hogwarts.school.service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.dto.FacultyDtoIn;
@@ -14,6 +17,8 @@ import ru.hogwarts.school.mapper.FacultyMapper;
 import ru.hogwarts.school.mapper.StudentMapper;
 import ru.hogwarts.school.repository.FacultyRepository;
 import ru.hogwarts.school.repository.StudentRepository;
+
+import static java.util.stream.Stream.*;
 
 @Service
 public class FacultyService {
@@ -86,5 +91,35 @@ public class FacultyService {
         .map(studentMapper::toDto)
         .collect(Collectors.toList());
   }
+  public String getLongestName() {
+    return facultyRepository.findAll().stream()
+            .map(Faculty::getName)
+            .max(Comparator.comparing(String::length))
+            .get();
+  }
+
+  public Integer sum() {
+    long start = System.currentTimeMillis();
+    int res = iterate(1, a -> a +1)
+            .limit(1_000_000)
+            .reduce(0, (a, b) -> a + b );
+    long finish = System.currentTimeMillis();
+    long dif = finish - start;
+    System.out.println("simple: " + dif);
+    return res;
+  }
+
+  public Integer sumImpr() {
+    long start = System.currentTimeMillis();
+    int res = iterate(1, a -> a +1)
+            .parallel()
+            .limit(1_000_000)
+            .reduce(0, (a, b) -> a + b );
+    long finish = System.currentTimeMillis();
+    long dif = finish - start;
+    System.out.println("impr: " + dif);
+    return res;
+  }
+
 
 }
